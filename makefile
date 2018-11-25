@@ -5,9 +5,9 @@ PROJECT=parawebshell
 COMPILE_OPT=-std=c++11
 
 $(PROJECT) : main.cpp
-	g++ $(COMPILE_OPT) -c main.cpp
-	g++ main.o -o $(PROJECT)
+	g++ $(COMPILE_OPT) -c main.cpp -o $(BIN)/main.o
+	g++ main.o -o $(BIN)/$(PROJECT)
 
 clean :
-	rm -rf *.o
-	rm $(PROJECT)
+	rm -rf $(BIN)/*.o
+	rm -f $(BIN)/$(PROJECT)
