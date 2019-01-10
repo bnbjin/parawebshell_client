@@ -5,7 +5,7 @@ ROOT=$(ABS_PWDIR)
 BIN=$(ROOT)/bin
 LIB=$(ROOT)/lib
 PROJECT=parawebshell
-COMPILE_OPT=-std=c++11
+COMPILE_OPT=-std=c++11 -g
 LINK_OPT=
 
 

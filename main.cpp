@@ -6,6 +6,8 @@
 using namespace std;
 
 
+
+
 void sigfunc_dispatcher(int signo)
 {
     if (SIGUSR1 == signo)
@@ -23,13 +25,26 @@ void sigfunc_dispatcher(int signo)
 }
 
 
+// extern char *sys_siglist[];
+
+
 int main(int argc, char *argv[])
 {
-    sighandler_t sigfn_usr1 = signal(SIGUSR1, sigfunc_dispatcher);
-    sighandler_t sigfn_usr2 = signal(SIGUSR2, sigfunc_dispatcher);
+    //sighandler_t sigfn_usr1 = signal(SIGUSR1, sigfunc_dispatcher);
+    //sighandler_t sigfn_usr2 = signal(SIGUSR2, sigfunc_dispatcher);
 
-    cout << "old sigfn_usr1: " << sigfn_usr1 << endl;
-    cout << "old sigfn_usr2: " << sigfn_usr2 << endl;
+    //cout << "old sigfn_usr1: " << sigfn_usr1 << endl;
+    //cout << "old sigfn_usr2: " << sigfn_usr2 << endl;
+
+    psignal(SIGUSR1, "hello");
+
+    size_t i = 1;
+    while (sys_siglist[i])
+    {
+        cout << i << " : " << sys_siglist[i] << endl;
+
+        ++i;
+    }
 
     sleep(300);
 
