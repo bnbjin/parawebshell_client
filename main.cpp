@@ -1,52 +1,49 @@
 #include <iostream>
+#include <exception>
+#include <thread>
 
-#include <unistd.h>
+#include <boost/asio.hpp>
+#include <boost/stacktrace.hpp>
+
 #include <signal.h>
 
+#include "http.hpp"
+#include "router.hpp"
+
+
 using namespace std;
-
-
-
-
-void sigfunc_dispatcher(int signo)
-{
-    if (SIGUSR1 == signo)
-    {
-        cout << "catch signal usr 1" << endl;
-    }
-    else if (SIGUSR2 == signo)
-    {
-        cout << "catch signal usr 2" << endl;
-    }
-    else 
-    {
-        cout << "catch unkown signal" << endl;
-    }
-}
-
-
-// extern char *sys_siglist[];
+using namespace pws;
 
 
 int main(int argc, char *argv[])
+try 
 {
-    //sighandler_t sigfn_usr1 = signal(SIGUSR1, sigfunc_dispatcher);
-    //sighandler_t sigfn_usr2 = signal(SIGUSR2, sigfunc_dispatcher);
+    boost::asio::io_context io_context;
+    thread t([&io_context](){ io_context.run(); });
+    
+    /* setting signal's thing */
+    struct sigaction oact_int = { 0 };
+    struct sigaction oact_term = { 0 };
 
-    //cout << "old sigfn_usr1: " << sigfn_usr1 << endl;
-    //cout << "old sigfn_usr2: " << sigfn_usr2 << endl;
+    int res_int = ::sigaction(SIGINT, NULL, &oact_int);
+    int res_term = ::sigaction(SIGTERM, NULL, &oact_term);
 
-    psignal(SIGUSR1, "hello");
-
-    size_t i = 1;
-    while (sys_siglist[i])
-    {
-        cout << i << " : " << sys_siglist[i] << endl;
-
-        ++i;
-    }
-
-    sleep(300);
-
+    /* do the thing */
+    router<http> rtr("wttr.in", "80");
+    
     return 0;
+}
+catch (exception &e)
+{
+    cerr << e.what() << endl;
+    cerr << boost::stacktrace::stacktrace();
+
+    return -1;
+}
+catch (...)
+{
+    cerr << "Unknown exception caught while posting http request." << endl;
+    cerr << boost::stacktrace::stacktrace();
+        
+    return -1;
 }
