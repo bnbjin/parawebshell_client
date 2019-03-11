@@ -1,2 +1,5 @@
-# parawebshell_client
+# parawebshell client
 paradox web shell
+
+# third party libraries requirement
+* libpcap
