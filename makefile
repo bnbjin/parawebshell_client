@@ -7,18 +7,18 @@ LIB=$(ROOT)/lib
 TESTDIR=$(ROOT)/test
 PROJECT=parawebshell
 INC_DIR=./
-COMPILE_OPT=-I$(INC_DIR) -std=c++11 -g
+COMPILE_OPT=-I$(INC_DIR) -I/usr/include/ -std=c++11 -g
 LINK_OPT=-L/usr/lib/boost -lboost_stacktrace_basic -lboost_system -ldl -lpthread
 TEST_LINK_OPT=-L/usr/lib/boost -lboost_test
 UNIT_TEST_CASE_OBJ= http_test.o
 
-.PHONY: test http_test clean
+.PHONY: release test http_test clean
 
-$(BIN)/$(PROJECT) : $(BIN)/ps.o $(BIN)/http.o $(BIN)/main.o
+release : $(BIN)/ps.o $(BIN)/http.o $(BIN)/main.o
 	g++ $(BIN)/*.o $(LINK_OPT) -o $(BIN)/$(PROJECT)
 
 $(BIN)/ps.o : ps.hpp ps.cpp
-	g++ $(COMPILE_OPT) -c $(ROOT)/ps.cpp -o $(BIN)/ps.o 
+	g++ $(COMPILE_OPT) -c $(ROOT)/ps.cpp -o $@
 
 $(BIN)/http.o : http.hpp http.cpp pwsque.hpp
 	g++ $(COMPILE_OPT) -c $(ROOT)/http.cpp -o $(BIN)/http.o

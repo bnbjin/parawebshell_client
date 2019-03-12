@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+#define BOOST_ASIO_NO_DEPRECATED
 #include <boost/asio.hpp>
 
 #include "pwsque.hpp"
